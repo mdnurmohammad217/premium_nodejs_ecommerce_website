@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Defensive handler for environments where window.fetch is getter-only on Window prototype
+      try {
+        if (typeof window !== 'undefined' && window.fetch) {
+          let _currentFetch = window.fetch.bind(window);
+          Object.defineProperty(window, 'fetch', {
+            get() {
+              return _currentFetch;
+            },
+            set(fn) {
+              _currentFetch = fn;
+            },
+            configurable: true,
+            enumerable: true,
+          });
+        }
+      } catch (e) {
+        // Silently continue
+      }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // v3.13 — a visitor who chose Arabic gets a right-to-left page from the first paint
+      try {
+        var p = location.pathname;
+        if (!/^\/(admin|dashboard|pos)(\/|$)/.test(p)) {
+          var q = new URLSearchParams(location.search).get('lang');
+          var l = /^(en|bn|hi|ar|fr)$/.test(q || '') ? q : localStorage.getItem('store-lang');
+          if (l && /^(en|bn|hi|ar|fr)$/.test(l)) {
+            document.documentElement.lang = l;
+            if (l === 'ar') document.documentElement.dir = 'rtl';
+          }
+        }
+      } catch (e) {}
+    </script>
+    <!-- v3.12: the server writes a plain-HTML copy of the page text into #root for
+         crawlers; it stays out of sight and React replaces it on start -->
+    <style>
+      .boot-shell{display:block;background:var(--ds-bg,#f8fafc)}
+      .boot-top{height:36px;background:var(--ds-gray-900,#111827)}
+      .boot-head{height:65px;background:var(--ds-surface,#fff);border-bottom:1px solid var(--ds-border,#e5e7eb)}
+      .boot-in{max-width:80rem;height:100%;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:center}
+      .boot-name{font:700 18px/1.2 'Public Sans Variable',system-ui,sans-serif;color:var(--ds-text,#0f172a);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60vw}
+      .boot-logo{height:36px;width:auto;max-width:140px;object-fit:contain}
+      .boot-lg{display:none}
+      .boot-hero{display:block;width:100%;height:auto}
+      .boot-page{max-width:var(--ds-page-max,80rem);margin:0 auto;padding:16px var(--ds-gutter,16px)}
+      .boot-pgrid{display:grid;gap:24px}
+      .boot-pimg{aspect-ratio:var(--product-ratio,1);border-radius:var(--ds-r-xl,16px);overflow:hidden;background:var(--ds-surface-2,#f1f5f9)}
+      .boot-pimg img{display:block;width:100%;height:100%;object-fit:var(--product-fit,cover)}
+      .boot-ptitle{font:700 22px/1.3 'Public Sans Variable',system-ui,sans-serif;color:var(--ds-text,#0f172a)}
+      .boot-pprice{margin-top:12px;font:800 26px/1.2 'Public Sans Variable',system-ui,sans-serif;color:var(--primary,#0f766e)}
+      @media (max-width:767px){.boot-md{display:none}}
+      @media (min-width:640px){.boot-page{padding-top:24px}}
+      @media (min-width:1024px){.boot-pgrid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px}.boot-pimg{margin-left:100px}}
+      @media (min-width:1024px){.boot-head{height:126px}.boot-in{height:76px;justify-content:flex-start}.boot-name{font-size:20px}.boot-sm{display:none}.boot-lg{display:block;height:44px;max-width:200px}}
+    </style>
+    <style>.seo-snapshot{font-family:sans-serif!important;position:absolute!important;width:1px!important;height:1px!important;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}</style>
+    <!--
+      SEO/OG placeholders. The Node server rewrites everything between the
+      SSR-META markers with the store's real branding before sending the page,
+      so link previews and crawlers (which never run JavaScript) see the right
+      title, description and image instead of these build-time defaults.
+    -->
+    <!--SSR-META-START-->
+    <title>Online Store</title>
+    <meta name="description" content="" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e2e8f0'/%3E%3C/svg%3E" />
+    <meta property="og:title" content="Online Store" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Online Store" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!--SSR-META-END-->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
